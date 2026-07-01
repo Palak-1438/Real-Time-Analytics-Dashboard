@@ -2,17 +2,18 @@
 
 A modern, production-ready **Real-Time Analytics Dashboard** built with the **MERN Stack**, featuring live data updates, interactive analytics, secure authentication, and a scalable architecture inspired by modern SaaS admin dashboards.
 
+![CI/CD Pipeline](https://github.com/USERNAME/REPO/actions/workflows/ci.yml/badge.svg)
+
 ## ✨ Features
 
 ### 🔐 Authentication
-
 * JWT Authentication
-* Secure Login & Registration
+* Secure Login & Registration with BCrypt hashing
 * Protected Routes
 * Role-Based Access Control (Admin, Manager, Viewer)
+* No privilege escalation path during registration.
 
 ### 📊 Dashboard
-
 * KPI Cards
 * Revenue Analytics
 * User Analytics
@@ -23,7 +24,6 @@ A modern, production-ready **Real-Time Analytics Dashboard** built with the **ME
 * Live Notifications
 
 ### 📈 Analytics
-
 * Interactive Line Charts
 * Area Charts
 * Bar Charts
@@ -31,31 +31,52 @@ A modern, production-ready **Real-Time Analytics Dashboard** built with the **ME
 * Real-Time Updates using Socket.IO
 
 ### 📋 Data Management
-
 * Reusable Data Tables
 * Search
 * Sorting
 * Pagination
 * Filtering
-* Loading & Empty States
+* Loading (Skeleton UI) & Empty States
 
 ### 🎨 UI/UX
-
 * Responsive Design
-* Dark & Light Mode
+* Dark & Light Mode via Context
 * Modern Dashboard Layout
-* Smooth Animations
+* Smooth Animations (Tailwind + Framer Motion)
 * Mobile Friendly
 * Accessible Components
+* Toast Notifications (React-Toastify)
 
 ---
 
-# 🛠 Tech Stack
+# 🏗 Architecture & Design
 
-## Frontend
+## Component Diagram
+```text
+React Frontend
+        │
+        ▼
+   API Layer
+        │
+────────┼────────
+▼       ▼       ▼
+Auth  Dashboard  Socket
+        │
+        ▼
+ Express Backend
+        │
+────────┼────────
+▼       ▼       ▼
+Routes  Service Repo
+        │
+        ▼
+     MongoDB
+```
 
-* React (Vite)
-* Tailwind CSS
+## Tech Stack
+### Frontend
+* React 19 (Vite)
+* Tailwind CSS v4
 * React Router
 * TanStack Query
 * Axios
@@ -64,15 +85,15 @@ A modern, production-ready **Real-Time Analytics Dashboard** built with the **ME
 * React Hook Form
 * Framer Motion
 
-## Backend
-
+### Backend
 * Node.js
 * Express.js
-* MongoDB
-* Mongoose
+* MongoDB / Mongoose
 * Socket.IO
 * JWT Authentication
 * Bcrypt
+* Winston (Structured Logging)
+* Swagger UI (API Docs)
 
 ---
 
@@ -80,20 +101,19 @@ A modern, production-ready **Real-Time Analytics Dashboard** built with the **ME
 
 ```text
 project/
-
 ├── client/
 │   ├── src/
 │   │   ├── api/
 │   │   ├── assets/
-│   │   ├── components/
+│   │   ├── components/ (cards, charts, common, layout, tables, ui)
 │   │   ├── constants/
 │   │   ├── contexts/
 │   │   ├── hooks/
-│   │   ├── layouts/
-│   │   ├── pages/
+│   │   ├── pages/ (auth, Dashboard)
+│   │   ├── providers/
 │   │   ├── services/
 │   │   ├── store/
-│   │   ├── styles/
+│   │   ├── types/
 │   │   ├── utils/
 │   │   └── App.jsx
 │
@@ -105,157 +125,77 @@ project/
 │   ├── repositories/
 │   ├── routes/
 │   ├── services/
-│   ├── sockets/
+│   ├── socket/
+│   ├── tests/
 │   ├── utils/
 │   └── server.js
 │
+├── docker-compose.yml
+├── postman_collection.json
 └── README.md
 ```
 
 ---
 
-# ⚡ Core Features
+# 🧪 Getting Started
 
-* Real-Time Dashboard
-* Live Analytics
-* WebSocket Communication
-* Secure Authentication
-* Responsive UI
-* Scalable Folder Structure
-* Reusable Components
-* REST API
-* Error Handling
-* Theme Support
-* Modern Charts
-* Activity Logs
+## Using Docker (Recommended)
+You can run the entire application using Docker Compose with zero manual setup.
+```
+docker compose up --build
+```
+*   **Frontend**: http://localhost:80
+*   **Backend/API**: http://localhost:5000
+*   **Swagger API Docs**: http://localhost:5000/swagger-ui/index.html
 
----
+## Manual Setup
 
-# 🏗 Architecture
+### Clone the Repository
+```
+git clone <repository-url>
+```
 
-```text
-Client
+### Server Setup
+```
+cd server
+npm install
+npm run dev &
+```
 
-↓
-
-React UI
-
-↓
-
-API Layer
-
-↓
-
-Express Routes
-
-↓
-
-Controllers
-
-↓
-
-Services
-
-↓
-
-Repositories
-
-↓
-
-MongoDB
+### Client Setup
+```
+cd client
+npm install
+npm run dev &
 ```
 
 ---
 
-# 🚀 Scalability
+# 📄 API Documentation
+The project includes automatic Swagger documentation. Once the server is running, navigate to:
+`http://localhost:5000/swagger-ui/index.html`
 
-The project is designed with scalability in mind:
+A Postman collection is also included in the repository root (`postman_collection.json`) covering standard API interactions.
 
-* Modular architecture
-* Reusable UI components
-* Feature-based organization
-* Separation of concerns
-* Clean API structure
-* Custom React hooks
-* Shared utilities
-* Optimized rendering
-* Lazy-loaded pages
-* Maintainable codebase for growing teams
+---
+
+# 🔒 Security Audit Checklist
+✔ Passwords are BCrypt hashed
+✔ JWT expiration configured
+✔ CORS restricted appropriately
+✔ Role-based authorization works correctly
+✔ No privilege escalation paths via registration
 
 ---
 
 # 📌 Future Enhancements
-
-* Export Reports (PDF/CSV)
 * Multi-Tenant Support
-* Email Notifications
-* Audit Logs
-* Advanced Analytics
-* Calendar Integration
-* Real-Time Chat
-* Docker Support
-* CI/CD Pipeline
-* Unit & Integration Testing
-* Cloud Deployment
-
----
-
-# 📷 Screenshots
-
-Will add application screenshots or GIFs here after development.
-
----
-
-# 🧪 Getting Started
-
-## Clone the Repository
-
-```bash
-git clone <repository-url>
-```
-
-## Install Dependencies
-
-### Client
-
-```bash
-cd client
-npm install
-```
-
-### Server
-
-```bash
-cd server
-npm install
-```
-
-## Start Development
-
-### Client
-
-```bash
-npm run dev
-```
-
-### Server
-
-```bash
-npm run dev
-```
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome. Feel free to open issues, submit pull requests, or suggest improvements.
+* Refresh Tokens Implementation
+* Export Reports (PDF/CSV)
+* Automated E2E testing with Cypress or Playwright
+* Kafka/Redis Integration for enterprise event streaming
 
 ---
 
 # 📄 License
-
 This project is licensed under the MIT License.
-
----
-
-## ⭐ If you found this project useful, consider giving it a star!
