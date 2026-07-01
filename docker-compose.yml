@@ -14,9 +14,9 @@ services:
       - "5000:5000"
     environment:
       - NODE_ENV=production
+      # Connecting to the mongodb service defined below
       - MONGO_URI=mongodb://mongodb:27017/analytics-dashboard
       - CLIENT_URL=http://localhost
-    # JWT_SECRET should be passed via a .env file on the host machine in production.
     depends_on:
       - mongodb
 
