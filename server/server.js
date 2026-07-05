@@ -36,19 +36,8 @@ if (process.env.NODE_ENV !== 'test') {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
-// Basic route
-/**
- * @swagger
- * /api/health:
- *   get:
- *     summary: Check server health
- *     responses:
- *       200:
- *         description: Server is running
- */
-app.get('/api/health', (req, res) => {
-    res.status(200).json({ status: 'success', message: 'Server is running' });
-});
+const indexRoutes = require('./routes/indexRoutes');
+app.use('/', indexRoutes);
 
 // Error Handling Middleware
 app.use(notFound);

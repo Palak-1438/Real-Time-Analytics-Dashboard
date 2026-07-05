@@ -1,0 +1,7 @@
+
+> server@1.0.0 start
+> node index.js
+
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+Server running on port 5000
+Error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
