@@ -16,9 +16,12 @@ services:
       - NODE_ENV=production
       # Connecting to the mongodb service defined below
       - MONGO_URI=mongodb://mongodb:27017/analytics-dashboard
+      - REDIS_URI=redis://redis:6379
       - CLIENT_URL=http://localhost
+      - JWT_SECRET=super_secret_jwt_key_for_dev_only
     depends_on:
       - mongodb
+      - redis
 
   mongodb:
     image: mongo:latest
@@ -27,5 +30,13 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
 volumes:
   mongodb_data:
+  redis_data:

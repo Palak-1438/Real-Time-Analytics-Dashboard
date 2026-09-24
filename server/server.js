@@ -14,6 +14,9 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 const app = express();
 const server = http.createServer(app);
 
+// Trust proxy for correct IP handling behind load balancers
+app.set('trust proxy', 1);
+
 // Set HTTP server timeouts
 server.setTimeout(config.http.timeout);
 
@@ -25,7 +28,16 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "validator.swagger.io"],
+        },
+    },
+}));
 app.use(cors({
     origin: config.clientUrl,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],

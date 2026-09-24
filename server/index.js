@@ -1,15 +1,28 @@
 const { app, server, PORT } = require('./server');
+const { initializeRedis, closeRedisConnections } = require('./config/redis');
 const { initializeSocket, getIo } = require('./socket');
 const mongoose = require('mongoose');
 const logger = require('./utils/logger');
 
-// Initialize Socket.io
-initializeSocket(server);
+const startServer = async () => {
+    try {
+        // Initialize Redis before Socket.io
+        await initializeRedis();
 
-// Start listening
-server.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`);
-});
+        // Initialize Socket.io
+        initializeSocket(server);
+
+        // Start listening
+        server.listen(PORT, () => {
+            logger.info(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        logger.error(`Failed to start server: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+startServer();
 
 // Graceful Shutdown
 const gracefulShutdown = async (signal) => {
@@ -45,6 +58,9 @@ const gracefulShutdown = async (signal) => {
             await mongoose.connection.close();
             logger.info('MongoDB connection closed.');
         }
+
+        // 4. Close Redis connection
+        await closeRedisConnections();
 
         logger.info('Graceful shutdown completed successfully.');
         process.exit(0);

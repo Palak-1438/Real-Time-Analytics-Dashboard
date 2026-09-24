@@ -12,6 +12,7 @@ const envSchema = joi.object({
     CLIENT_URL: joi.string().uri().default('http://localhost:5173'),
     MONGO_MAX_POOL_SIZE: joi.number().default(10),
     HTTP_TIMEOUT_MS: joi.number().default(30000), // 30 seconds
+    REDIS_URI: joi.string().required().description('Redis connection string'),
 }).unknown(true);
 
 const { error, value: envVars } = envSchema.validate(process.env);
@@ -24,6 +25,7 @@ if (error) {
         console.warn(`Config validation warning in test: ${error.message}`);
         envVars.MONGO_URI = envVars.MONGO_URI || 'mongodb://localhost:27017/test';
         envVars.JWT_SECRET = envVars.JWT_SECRET || 'test_secret';
+        envVars.REDIS_URI = envVars.REDIS_URI || 'redis://localhost:6379';
     }
 }
 
@@ -40,5 +42,8 @@ module.exports = {
     clientUrl: envVars.CLIENT_URL,
     http: {
         timeout: envVars.HTTP_TIMEOUT_MS
+    },
+    redis: {
+        uri: envVars.REDIS_URI
     }
 };
