@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userRepository = require('../repositories/userRepository');
+const config = require('../config/env');
 
 class AuthService {
     async register(userData) {
@@ -50,7 +51,7 @@ class AuthService {
 
         const token = jwt.sign(
             payload,
-            process.env.JWT_SECRET || 'fallback_secret_for_dev',
+            config.jwt.secret,
             { expiresIn: '1d' }
         );
 

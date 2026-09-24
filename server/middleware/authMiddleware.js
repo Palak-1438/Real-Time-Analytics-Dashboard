@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userRepository = require('../repositories/userRepository');
+const config = require('../config/env');
 
 const protect = async (req, res, next) => {
     let token;
@@ -8,7 +9,7 @@ const protect = async (req, res, next) => {
         try {
             token = req.headers.authorization.split(' ')[1];
 
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_for_dev');
+            const decoded = jwt.verify(token, config.jwt.secret);
 
             req.user = await userRepository.findById(decoded.user.id);
 

@@ -1,13 +1,14 @@
 const { Server } = require('socket.io');
 const { registerDashboardHandlers } = require('./handlers/dashboardHandler');
 const logger = require('../utils/logger');
+const config = require('../config/env');
 
 let io;
 
 const initializeSocket = (server) => {
     io = new Server(server, {
         cors: {
-            origin: process.env.CLIENT_URL || 'http://localhost:5173',
+            origin: config.clientUrl,
             methods: ['GET', 'POST']
         }
     });
