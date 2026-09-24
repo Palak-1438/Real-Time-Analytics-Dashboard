@@ -1,13 +1,23 @@
 const mongoose = require('mongoose');
+const config = require('./env');
+const logger = require('../utils/logger');
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/analytics-dashboard');
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        const conn = await mongoose.connect(config.mongo.uri, {
+            maxPoolSize: config.mongo.maxPoolSize,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
+        logger.info(`MongoDB Connected: ${conn.connection.host} with maxPoolSize: ${config.mongo.maxPoolSize}`);
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        logger.error(`MongoDB Connection Error: ${error.message}`);
         process.exit(1);
     }
 };
 
-module.exports = connectDB;
+const checkDBStatus = () => {
+    return mongoose.connection.readyState === 1;
+};
+
+module.exports = { connectDB, checkDBStatus };
